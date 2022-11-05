@@ -19,7 +19,7 @@ def multiplyTranspose(matrix): # Melakukan perkalian matrix
     result = np.matmul(matrix, transpose)
     return result
 
-# def covarian(listOfPhi) -> matriks
+# covarian(listOfPhi) -> matriks
 def covarian(listOfPhi): # Menghitung kovarian
     sum = multiplyTranspose(listOfPhi[0])
     for i in range(1, len(listOfPhi)):
@@ -67,7 +67,7 @@ def determinanCofactor(matrix_covarian): # Menggunakan metode kofaktor untuk men
         det = matrix_covarian[0][0]
     return det
 
-# eigenvalues(array) -> list berisi nilai eigen
+# eigenvalues(matrix_covarian) -> list berisi nilai eigen
 def eigenval(matrix_covarian): # Mengembalikan list berisi nilai eigen
     array = matrix_covarian[0]
     for i in range(len(array)):
