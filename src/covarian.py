@@ -1,10 +1,14 @@
 import numpy as np
 
+# Melakukan perkalian matrix
+
 
 def multiplyTranspose(matrix):
     transpose = np.matrix.transpose()
     result = np.matmul(matrix, transpose)
     return result
+
+# Menghitung nilai covarian
 
 
 def covarian(listOfPhi):
