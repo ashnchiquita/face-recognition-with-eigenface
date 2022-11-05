@@ -13,6 +13,20 @@ def selisihMeanMat(matrix, mean):
 # mean  : nilai mean dari seluruh himpunan matriks S
     return np.subtract(matrix, mean)
 
+# multiplyTranspose(matrix) -> matrix
+def multiplyTranspose(matrix): # Melakukan perkalian matrix
+    transpose = np.matrix.transpose()
+    result = np.matmul(matrix, transpose)
+    return result
+
+# def covarian(listOfPhi) -> matriks
+def covarian(listOfPhi): # Menghitung kovarian
+    sum = multiplyTranspose(listOfPhi[0])
+    for i in range(1, len(listOfPhi)):
+        sum += multiplyTranspose(listOfPhi[i])
+    cov = sum/len(listOfPhi)
+    return cov
+
 # minorMatrix(matrix, row, col) -> list
 def minorMatrix(matrix, row, col): # Mengembalikan matriks minor
     array = matrix[0]
