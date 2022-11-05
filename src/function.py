@@ -68,8 +68,33 @@ def determinanCofactor(matrix_covarian): # Menggunakan metode kofaktor untuk men
     return det
 
 # eigenvalues(array) -> list berisi nilai eigen
-def eigenvalues(array): # Mengembalikan nilai eigen
-    return np.roots(array)
+def eigenval(matrix_covarian): # Mengembalikan list berisi nilai eigen
+    array = matrix_covarian[0]
+    for i in range(len(array)):
+        for j in range(len(array)):
+            if (i == j):
+                matrix_covarian[i][j] = [(-1)*matrix_covarian[i][j]]
+                matrix_covarian[i][j].insert(0, 1)
+            else:
+                matrix_covarian[i][j] = matrix_covarian[i][j]*(-1)
+    mTemp = [[0 for j in range(len(array)-1)] for i in range(len(array)-1)]
+    det = 0
+    sign = 1
+    if (len(array) != 1):
+        for i in range(0, len(array)):
+            mTemp = minorMatrix(matrix_covarian, 0, i)
+            if (type(matrix_covarian[0][i]) != list):
+                det += (determinanCofactor(mTemp)*matrix_covarian[0][i]*sign)
+                sign *= (-1)
+            else:
+                if (type(determinanCofactor(mTemp)) != list):
+                    det += matrix_covarian[0][i]*determinanCofactor(mTemp)*sign
+                else:
+                    det += ((np.polymul(determinanCofactor(mTemp), matrix_covarian[0][i]))*(sign))
+                sign *= (-1) 
+    else:
+        det = matrix_covarian[0][0]
+    return np.roots(det)
 
 # eigenface(himpunan selisih matrix, eigenvector) -> matrix eigenface
 def eigenfaceMat(selisih, eigenvector):
