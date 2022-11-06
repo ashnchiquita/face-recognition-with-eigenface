@@ -1,0 +1,65 @@
+import cv2
+import os
+
+def readImage(pathFile):
+# Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
+# pathFile : string path dari file
+    return cv2.resize(cv2.cvtColor((cv2.imread(pathFile)), cv2.COLOR_BGR2GRAY), (256, 256), interpolation = cv2.INTER_AREA)
+
+def convertFrame(frame):
+# Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
+# frame : Mat dari sebuah image
+    return cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), (256, 256), interpolation = cv2.INTER_AREA)
+
+def takePhoto():
+# Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
+# Jika gagal mengembalikan None
+    cam_port = 0
+    cam = cv2.VideoCapture(cam_port)
+    result, img = cam.read()
+    
+    if result:
+        return img
+    else:
+        return None
+
+def readFolderImages(folderName):
+# Mengembalikan list berisi Mat dari image yang ada di setiap folder
+    matrixList = []
+    files = filesInsideFolder(folderName, [])
+    for imgPath in files:
+        #imgPath = os.path.join(folderName, images)
+        img = readImage(imgPath)
+        matrixList.append(img)
+    return matrixList
+
+def filesInsideFolder(folderName, listFiles):
+# Mengembalikan list berisi path-path dari setiap file images yang ada di folder
+# Mengabaikan file dengan format selain image yang disupport oleh OpenCV
+# folderName : string nama folder
+# listFiles : list of string, untuk nyimpen path filesnya (inisialisasinya pake [] aja)
+    for filename in os.listdir(folderName):
+        filepath = os.path.join(folderName, filename)
+        if (os.path.isfile(filepath)):
+            if (filepath.endswith(".png") or filepath.endswith(".jpg") or filepath.endswith(".jpeg") or filepath.endswith(".jpe") or filepath.endswith(".jp2") or filepath.endswith(".bmp") or filepath.endswith(".pbm") or filepath.endswith(".pgm") or filepath.endswith(".ppm") or filepath.endswith(".sr") or filepath.endswith(".ras") or filepath.endswith(".tiff") or filepath.endswith(".tif")):
+                listFiles.append(filepath)
+        elif (os.path.isdir(filepath)):
+            filesInsideFolder(filepath, listFiles)
+    return listFiles
+
+# Testing / ref kode di main
+        
+# img = takePhoto()
+# if (img is not None):
+#     cv2.imwrite('wokwok.png', img)
+# else:
+#     print("gagal")
+    
+# pathfolder = input("nama folder: ")
+# print(filesInsideFolder(pathfolder, []))
+# matList = readFolderImages(pathfolder)
+# num = 0
+# for images in matList:
+#     cv2.imwrite((str(num) + '.png'), images)
+#     print('berhasil')
+#     num += 1
