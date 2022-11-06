@@ -1,23 +1,32 @@
 import configImages as ci
 import function as fc
+import cv2
 
+# ini kukasih print biar tau aja udah sampe mana soalnya runningny lama
 
 # TRAINING
 
 # Menyiapkan data, membuat himpunan matriks training image (Run 5000 taun)
 # matList : list of mat
-pathfolder = "test" # dummy dlu
+pathfolder = "Algeo02-21046/test" # dummy dlu
 matList = ci.readFolderImages(pathfolder)
+
+print("Berhasil mengekstraksi training image! Maaf lama :((")
 
 # Mencari mean dari matList
 # mean : mat
 mean = fc.mean(matList)
 
+print("Berhasil menghitung mean training image!")
+
 # Membuat himpunan matriks selisih
 # selisihList : list of mat
 selisihList = []
 for mat in matList:
-    selisihList.append(fc.selisihMeanMat())
+    selisihList.append(fc.selisihMeanMat(mat, mean))
+    
+print("Berhasil menghitung selisih matriks training image dan mean!")
+cv2.imwrite("Mean.jpg", mean)
     
 # Menghitung matriks kovarian
 # kov : mat

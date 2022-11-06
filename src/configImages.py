@@ -47,6 +47,20 @@ def filesInsideFolder(folderName, listFiles):
             filesInsideFolder(filepath, listFiles)
     return listFiles
 
+def showImg(windowName, img):
+# Menampilkan image
+# windowName : string nama window
+# img : mat gambar yang bakal ditampilin
+    cv2.imshow(windowName, img)
+    return
+
+def writeImg(pathString, img):
+# Menyimpan image di path pathString
+# pathString : string path tempat menyimpan image
+# img : mat gambar yang bakal ditampilin
+    cv2.imwrite(pathString, img)
+    return
+
 # Testing / ref kode di main
         
 # img = takePhoto()
