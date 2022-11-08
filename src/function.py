@@ -1,13 +1,14 @@
 import numpy as np
-
+            
 # mean(list_of_matrix) -> matrix
 
 
 def mean(list_of_matrix):
-    sum = list_of_matrix[0]
-    for i in range(1, len(list_of_matrix)):
-        sum = np.add(sum, list_of_matrix[i])  # Menambahkan semua matriks
-    return sum*(1/len(list_of_matrix))
+    sum = [[0 for i in range(256)] for j in range(256)]
+    for img in list_of_matrix:
+        sum = np.add(sum, img) # Menambahkan semua matriks
+    mean = np.divide(sum, len(list_of_matrix))
+    return mean
 
 # selisih(matrix, mean) -> matrix
 
@@ -18,10 +19,8 @@ def selisihMeanMat(matrix, mean):
     return np.subtract(matrix, mean)
 
 # multiplyTranspose(matrix) -> matrix
-
-
-def multiplyTranspose(matrix):  # Melakukan perkalian matrix
-    transpose = np.matrix.transpose()
+def multiplyTranspose(matrix): # Melakukan perkalian matrix
+    transpose = np.transpose(matrix)
     result = np.matmul(matrix, transpose)
     return result
 
@@ -32,7 +31,7 @@ def covarian(listOfPhi):  # Menghitung kovarian
     sum = multiplyTranspose(listOfPhi[0])
     for i in range(1, len(listOfPhi)):
         sum += multiplyTranspose(listOfPhi[i])
-    cov = sum/len(listOfPhi)
+    cov = np.divide(sum, len(listOfPhi))
     return cov
 
 # minorMatrix(matrix, row, col) -> list

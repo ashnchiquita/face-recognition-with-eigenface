@@ -3,16 +3,18 @@ import os
 
 
 def readImage(pathFile):
-    # Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
-    # pathFile : string path dari file
-    return cv2.resize(cv2.cvtColor((cv2.imread(pathFile)), cv2.COLOR_BGR2GRAY), (256, 256), interpolation=cv2.INTER_AREA)
-
+# Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
+# pathFile : string path dari file
+    img = cv2.imread(pathFile, 0)
+    img = cv2.resize(img,(256,256))
+    return img
 
 def convertFrame(frame):
-    # Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
-    # frame : Mat dari sebuah image
-    return cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), (256, 256), interpolation=cv2.INTER_AREA)
-
+# Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
+# frame : Mat dari sebuah image
+    img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    img = cv2.resize(img,(256,256))
+    return img
 
 def takePhoto():
     # Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
@@ -31,10 +33,12 @@ def readFolderImages(folderName):
     # Mengembalikan list berisi Mat dari image yang ada di setiap folder
     matrixList = []
     files = filesInsideFolder(folderName, [])
+    count = 0
     for imgPath in files:
-        #imgPath = os.path.join(folderName, images)
         img = readImage(imgPath)
         matrixList.append(img)
+        count += 1
+        print(f"Converting images ({count}/{len(files)})")
     return matrixList
 
 
