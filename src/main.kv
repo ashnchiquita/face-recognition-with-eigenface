@@ -1,0 +1,51 @@
+<MainWidget>
+    orientation:'vertical'
+
+    BoxLayout:
+        padding:5
+        Image:
+            source:"Astronaut2.jpg"
+            size_hint_x: 0.4
+            allow_stretch: True
+
+        Label:
+            text:"01 Camisa Polo"
+            font_size:11
+            bold:True
+
+        Label:
+            text:"R$:6,00"
+            font_size:10
+
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+
+        Image: 
+            size_hint_y: None
+            width: 100
+            allow_stretch: True
+            source: "./test/Adriana Lima0_0.jpg"
+
+        GridLayout:
+            cols: 2
+            
+            Label:
+                text: "Hello Algeo one"
+            Label:
+                text: "This is the first one"
+
+            Label:
+                text: "Hello Algeo two"
+            Label:
+                text: "This is the first two"
+
+            Label:
+                text: "Hello Algeo three"
+            Label:
+                text: "This is the first three"
+        
+        Button:
+            text : "Submit"
+
+        
