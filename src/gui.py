@@ -2,6 +2,9 @@ from tkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
 from tkinter import filedialog
+import cv2
+import configImages
+from timeit import default_timer as timer
 
 # initialize root and title
 main = Tk()
@@ -29,40 +32,60 @@ desc2 = Label(imageFrame, text='Closest Result', font=("Arial", 15, "bold"), bg=
     row=0, column=1, padx=10, pady=(10, 0))
 
 # Image Container
-testImage = ImageTk.PhotoImage(Image.open('src/Mean.jpg'))
+testResized = configImages.resizeImage('src/Mean.jpg')
+testImage = ImageTk.PhotoImage(image=testResized)
 testLabel = Label(imageFrame, image=testImage)
 testLabel.grid(row=1, column=0, padx=10, pady=10)
 
-closestResult = ImageTk.PhotoImage(Image.open('src/Mean.jpg'))
+resultImage = configImages.resizeImage('external/ayang.jpg')
+closestResult = ImageTk.PhotoImage(image=resultImage)
 resultLabel = Label(imageFrame, image=closestResult)
 resultLabel.grid(row=1, column=1, padx=10, pady=10)
 
-# Choose Test Image
+# Source file
+path = 'None'
 
-descFrame = LabelFrame(root, width=580, height=110, relief=FLAT, bg='#FFEADF')
+srcFrame = LabelFrame(root, width=570, height=20, relief=FLAT, bg='#FFEADF')
+srcFrame.grid_propagate(0)
+srcFrame.pack(pady=(10, 0))
+
+srcLabel = Label(srcFrame, text=f"Source : {path}", anchor='e', bg='#FFEADF', font=(
+    "Arial", 10, "bold"),).grid(
+    column=0, row=0, sticky='w', padx=20)
+
+# Frame for desc
+descFrame = LabelFrame(root, width=570, height=110, relief=FLAT, bg='#FFEADF')
 descFrame.grid_propagate(0)
 descFrame.pack(pady=20)
 
-descFrame.columnconfigure(0, weight=4)
-descFrame.columnconfigure(1, weight=16)
-descFrame.columnconfigure(2, weight=4)
+descFrame.columnconfigure(0, weight=1, uniform='col')
+descFrame.columnconfigure(1, weight=3, uniform='col')
+descFrame.columnconfigure(2, weight=1, uniform='col')
 
+
+# Choose Test Image
 filename = 'No Files Chosen'
 
 
 def chooseTest():
     global filename
+    global testImage
     filename = filedialog.askopenfile()
     if (filename):
         testDir.config(text=filename.name)
         testDir.update_idletasks()
+
+        testResized = configImages.resizeImage(filename.name)
+        testImage = ImageTk.PhotoImage(image=testResized)
+        testLabel.config(image=testImage)
+        testLabel.update_idletasks()
 
 
 testButton = Button(descFrame, text='Choose Test Image',
                     command=chooseTest, width=16, height=2).grid(row=1, column=0, pady=(0, 10))
 testDir = Label(descFrame, text=filename, font=(
     "Arial", 10, "bold"), bg='#FFEADF', anchor='e')
-testDir.grid(row=1, column=1, sticky='w', pady=(0, 10), padx=5)
+testDir.grid(row=1, column=1, sticky='w', pady=(0, 10), padx=(10, 5))
 
 # Choose Dataset
 
@@ -81,17 +104,35 @@ dataButton = Button(descFrame, text='Choose Dataset',
                     command=chooseDataset, width=16, height=2).grid(row=2, column=0, pady=(10, 0))
 dataDir = Label(descFrame, text=foldername, font=(
     "Arial", 10, "bold"), bg='#FFEADF', anchor='e')
-dataDir.grid(row=2, column=1, sticky='w', pady=(10, 0), padx=5)
+dataDir.grid(row=2, column=1, sticky='w', pady=(10, 0), padx=(10, 5))
 
 # Execute Recognize
-generateButton = Button(descFrame, text='Generate', font=("Montserrat", 15, "bold"), bg='#1F307C', fg='#FFFFFF').grid(
-    row=1, rowspan=2, column=2, padx=5, pady=5)
+
+
+def generate():
+    global elapsedTime
+    start = timer()
+
+    # process
+
+    end = timer()
+    elapsedTime = end-start
+
+    timeLabel.config(text=f'Execution time : {elapsedTime:.2f} seconds')
+    timeLabel.update_idletasks()
+
+
+generateButton = Button(descFrame, text='Generate', font=("Montserrat", 12, "bold"), bg='#1F307C', fg='#FFFFFF', width=10, command=generate).grid(
+    row=1, rowspan=2, column=2, padx=(5, 0), pady=5)
 
 # Execution Time
-exeFrame = LabelFrame(root)
-exeFrame.pack()
-time = 20
-timeLabel = Label(exeFrame, text=f'Execution time : {time}').grid(
-    row=5, columnspan=4)
+exeFrame = LabelFrame(root, relief=FLAT, bg='#FFEADF')
+exeFrame.pack(pady=(0, 20))
+
+elapsedTime = 0.00
+
+timeLabel = Label(
+    exeFrame, text=f'Execution time : {elapsedTime} seconds', bg='#FFEADF')
+timeLabel.grid(row=5, columnspan=4)
 
 root.mainloop()

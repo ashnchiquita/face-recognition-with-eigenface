@@ -1,20 +1,30 @@
 import cv2
 import os
+from PIL import Image
 
 
 def readImage(pathFile):
-# Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
-# pathFile : string path dari file
+    # Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
+    # pathFile : string path dari file
     img = cv2.imread(pathFile, 0)
-    img = cv2.resize(img,(256,256))
+    img = cv2.resize(img, (256, 256))
     return img
 
+
 def convertFrame(frame):
-# Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
-# frame : Mat dari sebuah image
+    # Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
+    # frame : Mat dari sebuah image
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    img = cv2.resize(img,(256,256))
+    img = cv2.resize(img, (256, 256))
     return img
+
+
+def resizeImage(source):
+    resultImage = cv2.imread(source)
+    resultImage = cv2.cvtColor(resultImage, cv2.COLOR_BGR2RGB)
+    resultImage = cv2.resize(resultImage, (256, 256))
+    return Image.fromarray(resultImage)
+
 
 def takePhoto():
     # Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
