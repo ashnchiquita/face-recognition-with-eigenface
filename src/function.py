@@ -154,3 +154,19 @@ def upper_triangle(matrix, e):
             if (i <= j):
                 matrix_output[i][j] = np.dot(e[i], matrix[j])
     return np.matrix(matrix_output)
+
+# Finding Eigenvalue
+def eigenvalue(matrix):
+    eigenval = []
+    for i in range(1000):
+        Q = orthogonal_matrix(matrix)
+        R = upper_triangle(matrix, Q)
+        Qt = np.transpose(Q)
+        matrix = np.matmul(Qt, matrix)
+        matrix = np.matmul(matrix, Q)
+
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if (i == j):
+                eigenval.append(matrix[i][j])
+    return eigenval
