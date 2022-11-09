@@ -123,3 +123,34 @@ def eigenfaceMat(selisih, eigenvector):
     for i in range(1, len(selisih)):
         miu = np.add(miu, np.multiply(eigenvector, selisih[i]))
     return miu
+
+def euclidean_norm(vector):
+    total = 0
+    for a in vector:
+        total += (a**2)
+    total = total**(1/2)
+    return total
+
+# QR Decomposition Using Gram-Schmidt Procedure
+
+def orthogonal_matrix(matrix):
+    matrix = np.transpose(matrix)
+    result = []
+    for vector in matrix:
+        sum = [0 for i in range(len(matrix))]
+        for a in result:
+            sum = np.add(sum, np.dot(vector, a)*a)
+        a = np.subtract(vector, sum)
+        result.append(a/euclidean_norm(a))
+    result = np.transpose(result)
+    return np.array(result)
+
+def upper_triangle(matrix, e):
+    matrix_output = [[0 for j in range(len(matrix))] for i in range(len(matrix))]
+    matrix = np.transpose(matrix)
+    e = np.transpose(e)
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if (i <= j):
+                matrix_output[i][j] = np.dot(e[i], matrix[j])
+    return np.matrix(matrix_output)
