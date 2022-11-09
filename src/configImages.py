@@ -1,6 +1,7 @@
 import cv2
 import os
 from PIL import Image
+import time
 
 
 def readImage(pathFile):
@@ -29,9 +30,22 @@ def resizeImage(source):
 def takePhoto():
     # Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
     # Jika gagal mengembalikan None
+    global cam
+    global img
+    start = time.time()
+
     cam_port = 0
-    cam = cv2.VideoCapture(cam_port)
-    result, img = cam.read()
+    cam = cv2.VideoCapture(cam_port, cv2.CAP_DSHOW)
+
+    while (True):
+        result, img = cam.read()
+        cv2.imshow('Camera', img)
+
+        if cv2.waitKey(1) & (time.time()-start > 3):
+            break
+
+    cam.release()
+    cv2.destroyAllWindows()
 
     if result:
         return img

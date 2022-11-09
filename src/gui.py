@@ -123,7 +123,38 @@ def generate():
 
 
 generateButton = Button(descFrame, text='Generate', font=("Montserrat", 12, "bold"), bg='#1F307C', fg='#FFFFFF', width=10, command=generate).grid(
-    row=1, rowspan=2, column=2, padx=(5, 0), pady=5)
+    row=1, column=2, padx=(5, 0), pady=5)
+
+# Live Detect
+
+
+def detectLive():
+    global imgResized
+
+    img = configImages.takePhoto()
+
+    imgResized = cv2.resize(img, (256, 256))
+    imgResized = cv2.cvtColor(imgResized, cv2.COLOR_BGR2RGB)
+
+    return imgResized
+
+
+def detect():
+    global testImage
+    # img = configImages.takePhoto()
+    img = detectLive()
+
+    testDir.config(text="Test Image from Live Camera")
+    testDir.update_idletasks()
+
+    # testResized = configImages.convertFrame(img)
+    testImage = ImageTk.PhotoImage(image=Image.fromarray(img))
+    testLabel.config(image=testImage)
+    testLabel.update_idletasks()
+
+
+liveDetect = Button(descFrame, text='Live Detect', font=("Montserrat", 12, "bold"), bg='#1F307C', fg='#FFFFFF', width=10, command=detect).grid(
+    row=2, column=2, padx=(5, 0), pady=5)
 
 # Execution Time
 exeFrame = LabelFrame(root, relief=FLAT, bg='#FFEADF')
