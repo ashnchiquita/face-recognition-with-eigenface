@@ -6,6 +6,8 @@ import cv2
 import configImages
 from timeit import default_timer as timer
 
+usingPath = True
+
 # initialize root and title
 main = Tk()
 main.title('Face Recognition with EigenFace')
@@ -70,6 +72,7 @@ filename = 'No Files Chosen'
 def chooseTest():
     global filename
     global testImage
+    global usingPath
     filename = filedialog.askopenfile()
     if (filename):
         testDir.config(text=filename.name)
@@ -79,6 +82,8 @@ def chooseTest():
         testImage = ImageTk.PhotoImage(image=testResized)
         testLabel.config(image=testImage)
         testLabel.update_idletasks()
+
+        usingPath = True
 
 
 testButton = Button(descFrame, text='Choose Test Image',
@@ -114,6 +119,14 @@ def generate():
     start = timer()
 
     # process
+    if usingPath:
+        # kirim dalam bentuk path
+        print(filename.name)
+        pass
+    else:
+        # kirim dalam bentuk array
+        print(imgCamera)
+        pass
 
     end = timer()
     elapsedTime = end-start
@@ -141,16 +154,19 @@ def detectLive():
 
 def detect():
     global testImage
-    # img = configImages.takePhoto()
-    img = detectLive()
+    global usingPath
+    global imgCamera
+
+    imgCamera = detectLive()
 
     testDir.config(text="Test Image from Live Camera")
     testDir.update_idletasks()
 
-    # testResized = configImages.convertFrame(img)
-    testImage = ImageTk.PhotoImage(image=Image.fromarray(img))
+    testImage = ImageTk.PhotoImage(image=Image.fromarray(imgCamera))
     testLabel.config(image=testImage)
     testLabel.update_idletasks()
+
+    usingPath = False
 
 
 liveDetect = Button(descFrame, text='Live Detect', font=("Montserrat", 12, "bold"), bg='#1F307C', fg='#FFFFFF', width=10, command=detect).grid(
