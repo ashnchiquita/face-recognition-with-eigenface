@@ -83,7 +83,6 @@ def determinanCofactor(matrix_covarian):
 
 # eigenvalues(matrix_covarian) -> list berisi nilai eigen
 
-
 def eigenval(matrix_covarian):  # Mengembalikan list berisi nilai eigen
     array = matrix_covarian[0]
     for i in range(len(array)):
@@ -115,7 +114,6 @@ def eigenval(matrix_covarian):  # Mengembalikan list berisi nilai eigen
 
 # eigenface(himpunan selisih matrix, eigenvector) -> matrix eigenface
 
-
 def eigenfaceMat(selisih, eigenvector):
     # S             : himpunan matriks selisih training image dengan mean
     # eigenvector   : vektor eigen ke-i dari matriks kovarian
@@ -145,28 +143,29 @@ def orthogonal_matrix(matrix):
     result = np.transpose(result)
     return np.array(result)
 
-def upper_triangle(matrix, e):
+def upper_triangle(matrix, Q): # Q is obtained from the decomposition of the matrix using the Gram-Schmidt procedure
     matrix_output = [[0 for j in range(len(matrix))] for i in range(len(matrix))]
     matrix = np.transpose(matrix)
-    e = np.transpose(e)
+    Q = np.transpose(Q)
     for i in range(len(matrix)):
         for j in range(len(matrix)):
             if (i <= j):
-                matrix_output[i][j] = np.dot(e[i], matrix[j])
+                matrix_output[i][j] = np.dot(Q[i], matrix[j])
     return np.matrix(matrix_output)
 
-# Finding Eigenvalue
-def eigenvalue(matrix):
-    eigenval = []
-    for i in range(1000):
-        Q = orthogonal_matrix(matrix)
-        R = upper_triangle(matrix, Q)
-        Qt = np.transpose(Q)
-        matrix = np.matmul(Qt, matrix)
-        matrix = np.matmul(matrix, Q)
+# Finding Eigenvalue and Eigenvector
 
+def eigen(matrix): # Precondition: the input matrix has to be symmetric
+    eigenval = [0 for i in range(len(matrix))]
+    eigenvector = np.identity(len(matrix))
+    for i in range(100):
+        Q = orthogonal_matrix(matrix)
+        eigenvector = np.matmul(eigenvector, Q)
+        matrix = np.transpose(Q) @ matrix @ Q
+    
     for i in range(len(matrix)):
         for j in range(len(matrix)):
             if (i == j):
-                eigenval.append(matrix[i][j])
-    return eigenval
+                eigenval[i] = matrix[i][j]
+
+    return eigenval, eigenvector
