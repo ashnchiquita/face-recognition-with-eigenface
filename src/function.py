@@ -104,7 +104,7 @@ def eigen(matrix): # Precondition: the input matrix has to be symmetric
     for i in range(100):
         Q = orthogonal_matrix(matrix)
         eigenvector = np.matmul(eigenvector, Q)
-        matrix = np.transpose(Q) @ matrix @ Q
+        matrix = Q.T @ matrix @ Q
     
     for i in range(len(matrix)):
         for j in range(len(matrix)):
@@ -140,7 +140,8 @@ def faceRecog(pathfolder,pathUnknown):
 
     # eigVal : nData
     # eigVecSimpCov : nData x nData
-    eigVal, eigVecSimpCov = eigen(simpCov)
+    eigVal, eigVecSimpCov = eigen(simpCov) 
+    eigVal = np.array(eigVal, dtype=np.float32)
     idx = eigVal.argsort()[::-1]
     eigVal = eigVal[idx]
     eigVecSimpCov = eigVecSimpCov[:,idx]
@@ -186,17 +187,21 @@ def faceRecog(pathfolder,pathUnknown):
 
     omegaNew = np.squeeze(np.asarray(wNew.reshape(1,nData)))
 
-
     minDist = np.linalg.norm(np.subtract(omegaNew,omega[0,:]))
-    print(f"Euclidean Distance {filesList[0]}: {minDist}")
+    maxDist = minDist
     closestImgIdx = 0
     for i in range(1,nData):
         euDist = np.linalg.norm(np.subtract(omegaNew,omega[i,:]))
-        print(f"Euclidean Distance {filesList[i]}: {euDist}")
         if (euDist < minDist):
             minDist = euDist
             closestImgIdx = i
+        if (euDist > maxDist):
+            maxDist = euDist
+    
+    threshold = 0.5 * maxDist
+    recognized = (minDist < threshold)           
     
     percentage = 99999
-    return filesList[closestImgIdx], percentage
+    return filesList[closestImgIdx], recognized, percentage
     # return path terdekat, percentage (nyusul sepertinya saya butuh riset lebih jauh di sini)
+
