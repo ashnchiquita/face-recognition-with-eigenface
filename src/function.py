@@ -113,7 +113,17 @@ def eigen(matrix): # Precondition: the input matrix has to be symmetric
 
     return eigenval, eigenvector
 
-def faceRecog(pathfolder,pathUnknown):
+def testImgCam(rawTestImgMat):
+# rawTestImgMat masih raw (hasil takePhoto()), diubah jadi 256 x 256 grayscale
+    testImgMat = ci.convertFrame(rawTestImgMat)
+    return testImgMat
+
+def testImgFile(pathfile):
+# bikin jadi 256 x 256 grayscale dari file
+    testImgMat = ci.readImage(pathfile)
+    return testImgMat
+
+def faceRecog(pathfolder,testImgMat):
     filesList = ci.filesInsideFolder(pathfolder,[])
     nData = len(filesList)
     imSize = 256
@@ -174,8 +184,7 @@ def faceRecog(pathfolder,pathUnknown):
         xT[i,:] = np.add(mean, (u @ w).reshape(1, imVecSize))
         omega = np.vstack((omega, w.reshape(1,nData)))
 
-
-    yT = np.ndarray.flatten(ci.readImage(pathUnknown)).reshape(1,imVecSize)
+    yT = np.ndarray.flatten(testImgMat).reshape(1,imVecSize)
 
     ayT = yT - mean
     currAY = ayT.reshape(imVecSize,1)
@@ -204,4 +213,3 @@ def faceRecog(pathfolder,pathUnknown):
     percentage = 99999
     return filesList[closestImgIdx], recognized, percentage
     # return path terdekat, percentage (nyusul sepertinya saya butuh riset lebih jauh di sini)
-
