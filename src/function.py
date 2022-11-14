@@ -174,7 +174,6 @@ def faceRecog(pathfolder,pathUnknown):
         xT[i,:] = np.add(mean, (u @ w).reshape(1, imVecSize))
         omega = np.vstack((omega, w.reshape(1,nData)))
 
-
     yT = np.ndarray.flatten(ci.readImage(pathUnknown)).reshape(1,imVecSize)
 
     ayT = yT - mean
