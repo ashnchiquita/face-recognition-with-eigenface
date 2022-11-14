@@ -116,12 +116,16 @@ dataDir.grid(row=2, column=1, sticky='w', pady=(10, 0), padx=(10, 5))
 
 def generate():
     global elapsedTime
+
     start = timer()
 
     # process
     if usingPath:
         # kirim dalam bentuk path
+        ansPath, percentage = function.faceRecog(foldername, filename.name)
         print(filename.name)
+        print(ansPath)
+        print(percentage)
         pass
     else:
         # kirim dalam bentuk array
