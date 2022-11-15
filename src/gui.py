@@ -155,41 +155,33 @@ def generate():
             # kirim dalam bentuk path
             ansPath, recognized, percentage = function.faceRecog(
                 foldername, function.testImgFile(filename.name))
-
-            if recognized:
-                # change source path
-                srcLabel.config(
-                    text=f'{ansPath}')
-                srcLabel.update_idletasks()
-
-                # change closest result image
-                resultImage = configImages.resizeImage(ansPath)
-                closestResult = ImageTk.PhotoImage(image=resultImage)
-                resultLabel.config(image=closestResult)
-                resultLabel.update_idletasks()
-
-                # change status label
-                statusLabel.config(
-                    text=f'Recognized! Matches {percentage} %', fg='#000000')
-                statusLabel.update_idletasks()
-
-            else:
-                # change status label
-                statusLabel.config(
-                    text=f'Fail to recognize!')
-                statusLabel.update_idletasks()
-
         else:
             # kirim dalam bentuk array
-
             ansPath, recognized, percentage = function.faceRecog(
                 foldername, function.testImgCam(imgCamToSend))
-            print(imgCamera.shape)
-            print(imgResized.shape)
-            print(ansPath)
-            print(recognized)
-            print(percentage)
-            pass
+
+        # after processed
+        if recognized:
+            # change source path
+            srcLabel.config(
+                text=f'{ansPath}')
+            srcLabel.update_idletasks()
+
+            # change closest result image
+            resultImage = configImages.resizeImage(ansPath)
+            closestResult = ImageTk.PhotoImage(image=resultImage)
+            resultLabel.config(image=closestResult)
+            resultLabel.update_idletasks()
+
+            # change status label
+            statusLabel.config(
+                text=f'Recognized! Matches {percentage} %', fg='#000000')
+            statusLabel.update_idletasks()
+        else:
+            # change status label
+            statusLabel.config(
+                text=f'Fail to recognize!')
+            statusLabel.update_idletasks()
 
         end = timer()
         elapsedTime = end-start
@@ -215,7 +207,8 @@ def detectLive():
 
     img = configImages.takePhoto()
 
-    imgCamToSend = configImages.convertFrame(img)
+    # imgCamToSend = configImages.convertFrame(img)
+    imgCamToSend = img
 
     imgResized = cv2.resize(img, (256, 256))
     imgResized = cv2.cvtColor(imgResized, cv2.COLOR_BGR2RGB)
