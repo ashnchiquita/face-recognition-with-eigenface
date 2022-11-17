@@ -175,7 +175,7 @@ def generate():
 
             # change status label
             statusLabel.config(
-                text=f'Recognized! Matches {percentage} %', fg='#000000')
+                text=f'Recognized! Matches {percentage:.2f} %', fg='#000000')
             statusLabel.update_idletasks()
         else:
             # change status label

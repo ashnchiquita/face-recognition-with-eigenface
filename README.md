@@ -1,5 +1,39 @@
-# Algeo02-21046
-https://informatika.stei.itb.ac.id/~rinaldi.munir/AljabarGeometri/2022-2023/Tubes2-Algeo-2022.pdf
+# Face Recognition with Eigen Face
+Tugas Besar IF2123 Aljabar Linier dan Geometri
 
-if not working
-`pip install Pillow`
+## Tech Stack
+- Python
+- Numpy
+- OpenCV
+- Tkinter
+- Pillow
+
+## Understanding
+- EigenFace Algorithm
+    - Eigen Value
+    - Eigen Vector
+    - Covarian Matrix
+- Euclidean Distance
+
+## How to run program?
+### Prerequisites
+- Python 3.X
+- pip
+- Numpy library installed
+- OpenCV library installed
+- Tkinter library installed
+- Pillow library installed
+
+### Run
+- Make sure current directory `Algeo02-21046`
+- Run command `py src/gui.py`
+
+#### Install Libraries
+- `pip install numpy`
+- `pip install opencv`
+- `pip install tkinter`
+- `pip install Pillow`
+
+## Program Interface
+
+## Project Directories
