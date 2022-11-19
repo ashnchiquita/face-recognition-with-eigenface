@@ -1,5 +1,6 @@
 import numpy as np
 import configImages as ci
+import cv2
 
 # Image Pre Processing
 def normalizeImg(imgVec):
@@ -103,10 +104,10 @@ def faceRecog(pathfolder, testImgMat):
     imVecSize = imSize ** 2
 
     # xT : nData x 65535, 1 image 1 baris
-    xT = normalizeImg(np.ndarray.flatten(ci.readImage(filesList[0])))
+    xT = np.ndarray.flatten(ci.readImage(filesList[0]))
     for i in range(1, nData):
         img = ci.readImage(filesList[i])
-        img = normalizeImg(np.ndarray.flatten(img))
+        img = np.ndarray.flatten(img)
         xT = np.vstack((xT, img))
 
     # mean : 1 x 65535
@@ -132,8 +133,7 @@ def faceRecog(pathfolder, testImgMat):
     # eigVecCovT : nData x 65536
     eigVecCovT = normalize(aT.T @ eigVecSimpCov[:, 0])
     for i in range(1, k):  # for i in range(1,rank)
-        eigVecCovT = np.vstack(
-            (eigVecCovT, normalize(aT.T @ eigVecSimpCov[:, i])))
+        eigVecCovT = np.vstack((eigVecCovT, normalize(aT.T @ eigVecSimpCov[:, i])))
 
     u = eigVecCovT.T
 
@@ -159,7 +159,7 @@ def faceRecog(pathfolder, testImgMat):
         xT[i, :] = np.add(mean, (u @ w).reshape(1, imVecSize))
         omega = np.vstack((omega, w.reshape(1, nData)))
 
-    yT = np.ndarray.flatten(testImgMat).reshape(1, imVecSize)
+    yT = (np.ndarray.flatten(testImgMat)).reshape(1, imVecSize)
 
     ayT = yT - mean
     currAY = ayT.reshape(imVecSize, 1)
