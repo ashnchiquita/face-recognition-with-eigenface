@@ -6,6 +6,9 @@ import cv2
 import configImages
 from timeit import default_timer as timer
 import function
+import time
+import imutils
+import numpy as np
 
 usingPath = True
 
@@ -175,12 +178,12 @@ def generate():
 
             # change status label
             statusLabel.config(
-                text=f'Recognized! Matches {percentage:.2f} %', fg='#000000')
+                text=f'Recognized! Matches {percentage:.2f} %', fg='#00cc00')
             statusLabel.update_idletasks()
         else:
             # change status label
             statusLabel.config(
-                text=f'Fail to recognize!')
+                text=f'Fail to recognize!', fg='#FF0000')
             statusLabel.update_idletasks()
 
         end = timer()
@@ -201,35 +204,73 @@ generateButton = Button(descFrame, text='Generate', font=("Montserrat", 12, "bol
 # Live Detect
 
 
-def detectLive():
-    global imgResized
-    global imgCamToSend
-
-    img = configImages.takePhoto()
-
-    # imgCamToSend = configImages.convertFrame(img)
-    imgCamToSend = img
-
-    imgResized = cv2.resize(img, (256, 256))
-    imgResized = cv2.cvtColor(imgResized, cv2.COLOR_BGR2RGB)
-
-    return imgResized
-
-
 def detect():
     global testImage
     global usingPath
     global imgCamera
     global filename
-
-    imgCamera = detectLive()
+    global cam
+    global img
+    global imgCamToSend
 
     testDir.config(text="Test Image from Live Camera")
     testDir.update_idletasks()
 
-    testImage = ImageTk.PhotoImage(image=Image.fromarray(imgCamera))
+    start = time.time()
+
+    cam_port = 0
+    cam = cv2.VideoCapture(cam_port, cv2.CAP_DSHOW)
+
+    while (True):
+        result, img = cam.read()
+
+        # cv2.imshow('Camera', img)
+        # cv2.putText(img, str(int(6-time.time()+start)),
+        #             (60, 120), cv2.FONT_HERSHEY_SIMPLEX, color=(0, 255, 0), fontScale=3, thickness=3)
+        imgCamera = cv2.resize(img, (256, 256))
+        imgCamera = cv2.cvtColor(imgCamera, cv2.COLOR_BGR2RGB)
+        imgCamera = cv2.flip(imgCamera, 1)
+        imgCamera = Image.fromarray(imgCamera)
+        imgCamera2 = Image.open('border.png')
+        imgCamera.paste(imgCamera2, (0, 0), imgCamera2)
+
+        testImage = ImageTk.PhotoImage(image=imgCamera)
+        testLabel.config(image=testImage)
+        testLabel.update_idletasks()
+
+        statusLabel.config(
+            text=f'Capturing image in {int(5-time.time()+start)}.....', fg='#0000FF')
+        statusLabel.update_idletasks()
+
+        if cv2.waitKey(1) % 256 == 32 or (time.time()-start > 5):
+            break
+
+    cv2.imwrite('camera.jpg', img)
+
+    cam.release()
+    cv2.destroyAllWindows()
+
+    imgCamera = Image.open("camera.jpg")
+
+    # crop image
+    w, h = imgCamera.size
+
+    left = (w-256)/2
+    right = left+256
+    top = (h-256)/2
+    bottom = top+256
+    imgCamera = imgCamera.crop([left, top, right, bottom])
+
+    testImage = ImageTk.PhotoImage(image=imgCamera)
+
     testLabel.config(image=testImage)
     testLabel.update_idletasks()
+
+    statusLabel.config(
+        text=f'Image successfully captured', fg='#00cc00')
+    statusLabel.update_idletasks()
+
+    imgCamToSend = np.array(imgCamera)
 
     usingPath = False
     filename = ''

@@ -2,6 +2,7 @@ import cv2
 import os
 from PIL import Image
 import time
+import imutils
 
 
 def readImage(pathFile):
@@ -41,8 +42,12 @@ def takePhoto():
         result, img = cam.read()
         cv2.imshow('Camera', img)
 
-        if cv2.waitKey(1) & (time.time()-start > 3):
+        if cv2.waitKey(1) % 256 == 32 or (time.time()-start > 3):
             break
+
+    cv2.imwrite('camera.jpg', img)
+
+    
 
     cam.release()
     cv2.destroyAllWindows()

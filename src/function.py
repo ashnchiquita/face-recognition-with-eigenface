@@ -226,8 +226,11 @@ def faceRecog(pathfolder, testImgMat):
         if (euDist > maxDist):
             maxDist = euDist
 
-    threshold = 0.5 * maxDist
+    threshold = 0.9 * maxDist
     recognized = (minDist < threshold)
+
+    print(minDist)
+    print(maxDist)
 
     percentage = 100 - ((minDist/maxDist)*100)
     return filesList[closestImgIdx], recognized, percentage
