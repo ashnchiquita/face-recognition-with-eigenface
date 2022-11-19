@@ -1,8 +1,9 @@
 import function as fc
 
-pathfolder = "realTes"
-pathUnknown = "siapaCik1.jpg"
+pathfolder = "../tempTrainingImg"
+pathUnknown = "../testImg/siapaCik1(AdrianaLima).jpg"
 
-closestPath, percentage = fc.faceRecog(pathfolder, pathUnknown)
+testImgMat = fc.testImgFile(pathUnknown)
+closestPath,mirip, percentage = fc.faceRecog(pathfolder, testImgMat)
 
 print(closestPath)

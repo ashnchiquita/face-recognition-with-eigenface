@@ -1,48 +1,23 @@
 import numpy as np
 import configImages as ci
+import cv2
 
+# Image Pre Processing
+def normalizeImg(imgVec):
+    max = np.max(imgVec)
+    min = np.min(imgVec)
+    imgVec = imgVec.reshape((1,imgVec.shape[0]))
+    newVec = (imgVec - np.tile([min], (1,256**2))) * 255 * (1/(max-min))
+    return newVec
 
+# Normalizing A Vector
 def normalize(vec):
     length = np.linalg.norm(vec)
     if (length != 0):
         vec = vec / length
     return vec
 
-
-def mean(list_of_matrix):
-    sum = [[0 for i in range(256)] for j in range(256)]
-    for img in list_of_matrix:
-        sum = np.add(sum, img)  # Menambahkan semua matriks
-    mean = np.divide(sum, len(list_of_matrix))
-    return mean
-
-# selisih(matrix, mean) -> matrix
-
-
-def selisihMeanMat(matrix, mean):
-    # matrix: training image ke-i
-    # mean  : nilai mean dari seluruh himpunan matriks S
-    return np.subtract(matrix, mean)
-
-# multiplyTranspose(matrix) -> matrix
-
-
-def multiplyTranspose(matrix):  # Melakukan perkalian matrix
-    transpose = np.transpose(matrix)
-    result = np.matmul(matrix, transpose)
-    return result
-
-# covarian(listOfPhi) -> matriks
-
-
-def covarian(listOfPhi):  # Menghitung kovarian
-    sum = multiplyTranspose(listOfPhi[0])
-    for i in range(1, len(listOfPhi)):
-        sum += multiplyTranspose(listOfPhi[i])
-    cov = np.divide(sum, len(listOfPhi))
-    return cov
-
-
+# Find a minor of matrix
 def minorMatrix(matrix, row, col):  # Mengembalikan matriks minor
     array = matrix[0]
     minor = [[0 for j in range(len(array)-1)]
@@ -61,18 +36,7 @@ def minorMatrix(matrix, row, col):  # Mengembalikan matriks minor
                     minor[i-1][j] = matrix[i][j]
     return minor
 
-# eigenface(himpunan selisih matrix, eigenvector) -> matrix eigenface
-
-
-def eigenfaceMat(selisih, eigenvector):
-    # S             : himpunan matriks selisih training image dengan mean
-    # eigenvector   : vektor eigen ke-i dari matriks kovarian
-    miu = np.multiply(eigenvector, selisih[0])
-    for i in range(1, len(selisih)):
-        miu = np.add(miu, np.multiply(eigenvector, selisih[i]))
-    return miu
-
-
+# Menghitung Euclidean Distance
 def euclidean_norm(vector):
     total = 0
     for a in vector:
@@ -81,8 +45,6 @@ def euclidean_norm(vector):
     return total
 
 # QR Decomposition Using Gram-Schmidt Procedure
-
-
 def orthogonal_matrix(matrix):
     matrix = np.transpose(matrix)
     result = []
@@ -109,8 +71,6 @@ def upper_triangle(matrix, Q):
     return np.matrix(matrix_output)
 
 # Finding Eigenvalue and Eigenvector
-
-
 def eigen(matrix):  # Precondition: the input matrix has to be symmetric
     eigenval = [0 for i in range(len(matrix))]
     eigenvector = np.identity(len(matrix))
@@ -126,18 +86,16 @@ def eigen(matrix):  # Precondition: the input matrix has to be symmetric
 
     return eigenval, eigenvector
 
-
+# FACE RECOGNITION
 def testImgCam(rawTestImgMat):
     # rawTestImgMat masih raw (hasil takePhoto()), diubah jadi 256 x 256 grayscale
     testImgMat = ci.convertFrame(rawTestImgMat)
     return testImgMat
 
-
 def testImgFile(pathfile):
     # bikin jadi 256 x 256 grayscale dari file
     testImgMat = ci.readImage(pathfile)
     return testImgMat
-
 
 def faceRecog(pathfolder, testImgMat):
     filesList = ci.filesInsideFolder(pathfolder, [])
@@ -175,8 +133,7 @@ def faceRecog(pathfolder, testImgMat):
     # eigVecCovT : nData x 65536
     eigVecCovT = normalize(aT.T @ eigVecSimpCov[:, 0])
     for i in range(1, k):  # for i in range(1,rank)
-        eigVecCovT = np.vstack(
-            (eigVecCovT, normalize(aT.T @ eigVecSimpCov[:, i])))
+        eigVecCovT = np.vstack((eigVecCovT, normalize(aT.T @ eigVecSimpCov[:, i])))
 
     u = eigVecCovT.T
 
@@ -202,7 +159,7 @@ def faceRecog(pathfolder, testImgMat):
         xT[i, :] = np.add(mean, (u @ w).reshape(1, imVecSize))
         omega = np.vstack((omega, w.reshape(1, nData)))
 
-    yT = np.ndarray.flatten(testImgMat).reshape(1, imVecSize)
+    yT = (np.ndarray.flatten(testImgMat)).reshape(1, imVecSize)
 
     ayT = yT - mean
     currAY = ayT.reshape(imVecSize, 1)
@@ -215,11 +172,11 @@ def faceRecog(pathfolder, testImgMat):
 
     omegaNew = np.squeeze(np.asarray(wNew.reshape(1, nData)))
 
-    minDist = np.linalg.norm(np.subtract(omegaNew, omega[0, :]))
+    minDist = euclidean_norm(np.subtract(omegaNew, omega[0, :]))
     maxDist = minDist
     closestImgIdx = 0
     for i in range(1, nData):
-        euDist = np.linalg.norm(np.subtract(omegaNew, omega[i, :]))
+        euDist = euclidean_norm(np.subtract(omegaNew, omega[i, :]))
         if (euDist < minDist):
             minDist = euDist
             closestImgIdx = i
@@ -234,4 +191,3 @@ def faceRecog(pathfolder, testImgMat):
 
     percentage = 100 - ((minDist/maxDist)*100)
     return filesList[closestImgIdx], recognized, percentage
-    # return path terdekat, percentage (nyusul sepertinya saya butuh riset lebih jauh di sini)
