@@ -3,14 +3,12 @@ import os
 from PIL import Image
 import time
 
-
 def readImage(pathFile):
     # Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
     # pathFile : string path dari file
     img = cv2.imread(pathFile, 0)
     img = cv2.resize(img, (256, 256))
     return img
-
 
 def convertFrame(frame):
     # Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
@@ -19,13 +17,11 @@ def convertFrame(frame):
     img = cv2.resize(img, (256, 256))
     return img
 
-
 def resizeImage(source):
     resultImage = cv2.imread(source)
     resultImage = cv2.cvtColor(resultImage, cv2.COLOR_BGR2RGB)
     resultImage = cv2.resize(resultImage, (256, 256))
     return Image.fromarray(resultImage)
-
 
 def takePhoto():
     # Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
@@ -52,7 +48,6 @@ def takePhoto():
     else:
         return None
 
-
 def readFolderImages(folderName):
     # Mengembalikan list berisi Mat dari image yang ada di setiap folder
     matrixList = []
@@ -64,7 +59,6 @@ def readFolderImages(folderName):
         count += 1
         print(f"Converting images ({count}/{len(files)})")
     return matrixList
-
 
 def filesInsideFolder(folderName, listFiles):
     # Mengembalikan list berisi path-path dari setiap file images yang ada di folder
@@ -79,36 +73,3 @@ def filesInsideFolder(folderName, listFiles):
         elif (os.path.isdir(filepath)):
             filesInsideFolder(filepath, listFiles)
     return listFiles
-
-
-def showImg(windowName, img):
-    # Menampilkan image
-    # windowName : string nama window
-    # img : mat gambar yang bakal ditampilin
-    cv2.imshow(windowName, img)
-    return
-
-
-def writeImg(pathString, img):
-    # Menyimpan image di path pathString
-    # pathString : string path tempat menyimpan image
-    # img : mat gambar yang bakal ditampilin
-    cv2.imwrite(pathString, img)
-    return
-
-# Testing / ref kode di main
-
-# img = takePhoto()
-# if (img is not None):
-#     cv2.imwrite('wokwok.png', img)
-# else:
-#     print("gagal")
-
-# pathfolder = input("nama folder: ")
-# print(filesInsideFolder(pathfolder, []))
-# matList = readFolderImages(pathfolder)
-# num = 0
-# for images in matList:
-#     cv2.imwrite((str(num) + '.png'), images)
-#     print('berhasil')
-#     num += 1
