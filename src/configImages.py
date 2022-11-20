@@ -4,6 +4,7 @@ from PIL import Image
 import time
 import imutils
 
+
 def readImage(pathFile):
     # Mengubah 1 image dengan path pathFile menjadi Mat, grayscale, dan berukuran 256 x 256
     # pathFile : string path dari file
@@ -11,18 +12,24 @@ def readImage(pathFile):
     img = cv2.resize(img, (256, 256))
     return img
 
+
 def convertFrame(frame):
     # Mengubah 1 frame menjadi grayscale, dan berukuran 256 x 256
     # frame : Mat dari sebuah image
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, (256, 256))
+    # cv2.imshow("tes", img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     return img
+
 
 def resizeImage(source):
     resultImage = cv2.imread(source)
     resultImage = cv2.cvtColor(resultImage, cv2.COLOR_BGR2RGB)
     resultImage = cv2.resize(resultImage, (256, 256))
     return Image.fromarray(resultImage)
+
 
 def takePhoto():
     # Mengambil foto dari webcam, mengembalikan foto tersebut (tanpa diconvert)
@@ -43,8 +50,6 @@ def takePhoto():
 
     cv2.imwrite('camera.jpg', img)
 
-    
-
     cam.release()
     cv2.destroyAllWindows()
 
@@ -52,6 +57,7 @@ def takePhoto():
         return img
     else:
         return None
+
 
 def readFolderImages(folderName):
     # Mengembalikan list berisi Mat dari image yang ada di setiap folder
@@ -64,6 +70,7 @@ def readFolderImages(folderName):
         count += 1
         print(f"Converting images ({count}/{len(files)})")
     return matrixList
+
 
 def filesInsideFolder(folderName, listFiles):
     # Mengembalikan list berisi path-path dari setiap file images yang ada di folder

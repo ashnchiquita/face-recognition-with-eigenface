@@ -7,7 +7,6 @@ import configImages
 from timeit import default_timer as timer
 import function
 import time
-import imutils
 import numpy as np
 
 usingPath = True
@@ -224,9 +223,6 @@ def detect():
     while (True):
         result, img = cam.read()
 
-        # cv2.imshow('Camera', img)
-        # cv2.putText(img, str(int(6-time.time()+start)),
-        #             (60, 120), cv2.FONT_HERSHEY_SIMPLEX, color=(0, 255, 0), fontScale=3, thickness=3)
         imgCamera = cv2.resize(img, (256, 256))
         imgCamera = cv2.cvtColor(imgCamera, cv2.COLOR_BGR2RGB)
         imgCamera = cv2.flip(imgCamera, 1)
@@ -239,7 +235,7 @@ def detect():
         testLabel.update_idletasks()
 
         statusLabel.config(
-            text=f'Capturing image in {int(5-time.time()+start)}.....', fg='#0000FF')
+            text=f'Capturing image in {int(5-time.time()+start)}.....                                                             ', fg='#0000FF')
         statusLabel.update_idletasks()
 
         if cv2.waitKey(1) % 256 == 32 or (time.time()-start > 5):
