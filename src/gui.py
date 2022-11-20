@@ -37,13 +37,13 @@ desc2 = Label(imageFrame, text='Closest Result', font=("Arial", 15, "bold"), bg=
     row=0, column=1, padx=10, pady=(10, 0))
 
 # Image Container
-testResized = configImages.resizeImage('external/ayang.jpg')
+testResized = configImages.resizeImage('external/kelompok.jpg')
 testImage = ImageTk.PhotoImage(image=testResized)
 testLabel = Label(imageFrame, image=testImage)
 testLabel.grid(row=1, column=0, padx=10, pady=10)
 
 resultImage = configImages.resizeImage(
-    'C:/Users/ASUS/Pictures/BG/bae2\wp4891275.jpg')
+    'external/kelompok.jpg')
 closestResult = ImageTk.PhotoImage(image=resultImage)
 resultLabel = Label(imageFrame, image=closestResult)
 resultLabel.grid(row=1, column=1, padx=10, pady=10)
