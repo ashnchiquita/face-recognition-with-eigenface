@@ -33,6 +33,7 @@ Tugas Besar IF2123 Aljabar Linier dan Geometri
 - `pip install opencv`
 - `pip install tkinter`
 - `pip install Pillow`
+- `pip install imutils`
 
 ## Program Interface
 

@@ -1,13 +1,12 @@
 import numpy as np
 import configImages as ci
-import cv2
 
-# Image Pre Processing
+# Image Pre Processing (Normalizing An Image)
 def normalizeImg(imgVec):
     max = np.max(imgVec)
     min = np.min(imgVec)
     imgVec = imgVec.reshape((1,imgVec.shape[0]))
-    newVec = (imgVec - np.tile([min], (1,256**2))) * 255 * (1/(max-min))
+    newVec = (255/(max-min))*(imgVec - np.tile([min], (1,256**2)))
     return newVec
 
 # Normalizing A Vector
@@ -104,10 +103,10 @@ def faceRecog(pathfolder, testImgMat):
     imVecSize = imSize ** 2
 
     # xT : nData x 65535, 1 image 1 baris
-    xT = np.ndarray.flatten(ci.readImage(filesList[0]))
+    xT = normalizeImg(np.ndarray.flatten(ci.readImage(filesList[0])))
     for i in range(1, nData):
         img = ci.readImage(filesList[i])
-        img = np.ndarray.flatten(img)
+        img = normalizeImg(np.ndarray.flatten(img))
         xT = np.vstack((xT, img))
 
     # mean : 1 x 65535
@@ -159,7 +158,7 @@ def faceRecog(pathfolder, testImgMat):
         xT[i, :] = np.add(mean, (u @ w).reshape(1, imVecSize))
         omega = np.vstack((omega, w.reshape(1, nData)))
 
-    yT = (np.ndarray.flatten(testImgMat)).reshape(1, imVecSize)
+    yT = normalizeImg(np.ndarray.flatten(testImgMat)).reshape(1, imVecSize)
 
     ayT = yT - mean
     currAY = ayT.reshape(imVecSize, 1)
@@ -168,7 +167,7 @@ def faceRecog(pathfolder, testImgMat):
         wNew = np.vstack(
             (wNew, (eigVecCovT[j, :].reshape(1, imVecSize)) @ currAY))
 
-    yT[0, :] = np.add(mean, (u @ wNew).reshape(1, imVecSize))
+    yT[0, :] = (np.add(mean, (u @ wNew).reshape(1, imVecSize)))
 
     omegaNew = np.squeeze(np.asarray(wNew.reshape(1, nData)))
 
@@ -185,9 +184,6 @@ def faceRecog(pathfolder, testImgMat):
 
     threshold = 0.9 * maxDist
     recognized = (minDist < threshold)
-
-    print(minDist)
-    print(maxDist)
 
     percentage = 100 - ((minDist/maxDist)*100)
     return filesList[closestImgIdx], recognized, percentage
