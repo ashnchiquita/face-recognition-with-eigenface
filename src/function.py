@@ -116,7 +116,7 @@ def faceRecog(pathfolder, testImgMat):
     aT = xT - np.tile(mean, (nData, 1))
 
     # simpCov : nData x nData
-    simpCov = aT @ aT.T
+    simpCov =  (1/len(filesList)) * aT @ aT.T
 
     # choose rank
     k = nData
