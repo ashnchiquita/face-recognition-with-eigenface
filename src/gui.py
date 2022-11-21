@@ -226,7 +226,7 @@ def detect():
         imgCamera = cv2.cvtColor(imgCamera, cv2.COLOR_BGR2RGB)
         imgCamera = cv2.flip(imgCamera, 1)
         imgCamera = Image.fromarray(imgCamera)
-        imgCamera2 = Image.open('border.png')
+        imgCamera2 = Image.open('external/border.png')
         imgCamera.paste(imgCamera2, (0, 0), imgCamera2)
 
         testImage = ImageTk.PhotoImage(image=imgCamera)
@@ -240,12 +240,12 @@ def detect():
         if cv2.waitKey(1) % 256 == 32 or (time.time()-start > 5):
             break
 
-    cv2.imwrite('camera.jpg', img)
+    cv2.imwrite('external/camera.jpg', img)
 
     cam.release()
     cv2.destroyAllWindows()
 
-    imgCamera = Image.open("camera.jpg")
+    imgCamera = Image.open("external/camera.jpg")
 
     # crop image
     w, h = imgCamera.size

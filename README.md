@@ -36,5 +36,42 @@ Tugas Besar IF2123 Aljabar Linier dan Geometri
 - `pip install imutils`
 
 ## Program Interface
+![GUI](external/gui.jpg)
 
 ## Project Directories
+```bash
+Algeo02-21046
+│   README.md
+│
+├───doc
+│       Laporan Tubes 2 Algeo.pdf
+│
+├───external
+│       border.png
+│       camera.jpg
+│       gui.jpg
+│       kelompok.jpg
+│       logo.ico
+│
+├───src
+│       configImages.py
+│       function.py
+│       gui.py
+│
+└───test
+    │
+    ├───TestingImg
+    │   │
+    │   ├───IF21
+    │   │
+    │   └───Kaggle
+    │
+    └───TrainingImg
+        │
+        ├───IF21
+        │
+        └───Kaggle(Selected)
+
+```
+
+## Video Link
