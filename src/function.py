@@ -35,7 +35,7 @@ def minorMatrix(matrix, row, col):  # Mengembalikan matriks minor
                     minor[i-1][j] = matrix[i][j]
     return minor
 
-# Menghitung Euclidean Distance
+# Finding the length of a vector
 def euclidean_norm(vector):
     total = 0
     for a in vector:
