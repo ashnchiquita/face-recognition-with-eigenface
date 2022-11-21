@@ -16,25 +16,6 @@ def normalize(vec):
         vec = vec / length
     return vec
 
-# Find a minor of matrix
-def minorMatrix(matrix, row, col):  # Mengembalikan matriks minor
-    array = matrix[0]
-    minor = [[0 for j in range(len(array)-1)]
-             for i in range(len(array)-1)]  # Inisialisasi matriks
-    for i in range(0, len(array)):
-        for j in range(0, len(array)):
-            if (i < row):
-                if (j > col):
-                    minor[i][j-1] = matrix[i][j]
-                elif (j < col):
-                    minor[i][j] = matrix[i][j]
-            if (i > row):
-                if (j > col):
-                    minor[i-1][j-1] = matrix[i][j]
-                elif (j < col):
-                    minor[i-1][j] = matrix[i][j]
-    return minor
-
 # Finding the length of a vector
 def euclidean_norm(vector):
     total = 0
