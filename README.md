@@ -44,7 +44,7 @@ Algeo02-21046
 │   README.md
 │
 ├───doc
-│       Laporan Tubes 2 Algeo.pdf
+│       Algeo02-21046.pdf
 │
 ├───external
 │       border.png
